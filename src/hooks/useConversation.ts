@@ -118,6 +118,10 @@ export function useConversation({ initialMessage }: UseConversationProps) {
   );
 
   useEffect(() => {
+    if (conversationId) {
+      return;
+    }
+
     const controller = new AbortController();
 
     const input: CreateConversationInput = {
@@ -148,7 +152,7 @@ export function useConversation({ initialMessage }: UseConversationProps) {
     return () => {
       controller.abort();
     };
-  }, [addMessage]);
+  }, [addMessage, conversationId]);
 
   async function reply() {
     if (!conversationId) return;
