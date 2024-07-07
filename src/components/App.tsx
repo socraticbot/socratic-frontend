@@ -1,4 +1,5 @@
 import { Send } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 
 import { useConversation } from '@/hooks/useConversation';
 
@@ -11,54 +12,53 @@ interface AppProps {
 }
 
 export default function App({ initialMessage }: AppProps) {
+  const chatListRef = useRef<HTMLDivElement | null>(null);
   const { input, isLoading, messages, reply } = useConversation({
     initialMessage: initialMessage?.trim() || undefined,
   });
 
+  useEffect(() => {
+    // Scroll to bottom
+    chatListRef.current?.scrollTo({
+      top: chatListRef.current.scrollHeight,
+      behavior: 'smooth',
+    });
+  }, [messages]);
+
   return (
-    <main>
-      <div className="container w-full max-w-2xl border">
-        <h1 className="scroll-m-20 text-center font-header text-4xl font-extrabold tracking-tight lg:text-5xl">
-          Socratic Bot
-        </h1>
-
-        <div className="space-y-6">
-          <div className="max-h-96 space-y-4 overflow-y-auto">
-            {messages.map((message) => (
-              <Message key={message.id} role={message.role}>
-                {message.content}
-              </Message>
-            ))}
-          </div>
-
-          <form
-            className="flex flex-row"
-            onSubmit={(e) => {
-              e.preventDefault();
-              reply();
-            }}
-          >
-            <Input
-              className="rounded-l-md rounded-r-none"
-              placeholder="Type a message..."
-              value={input.value}
-              onChange={(e) => input.setValue(e.target.value)}
-            />
-            <Button
-              className="rounded-l-none rounded-r-md"
-              disabled={isLoading}
-              size="icon"
-              type="submit"
-            >
-              <Send />
-            </Button>
-          </form>
-
-          <Button className="mx-auto block shadow-xl" size="lg">
-            Return to Agora
-          </Button>
-        </div>
+    <main className="container flex h-full flex-col py-4">
+      <h1 className="scroll-m-20 text-center font-header text-4xl font-extrabold tracking-tight lg:text-5xl">
+        Socratic Bot
+      </h1>
+      <div ref={chatListRef} className="flex-1 space-y-4 overflow-y-auto">
+        {messages.map((message) => (
+          <Message key={message.id} role={message.role}>
+            {message.content}
+          </Message>
+        ))}
       </div>
+      <form
+        className="relative mt-2 flex flex-row"
+        onSubmit={(e) => {
+          e.preventDefault();
+          reply();
+        }}
+      >
+        <Input
+          className="rounded-full"
+          placeholder="Type a message..."
+          value={input.value}
+          onChange={(e) => input.setValue(e.target.value)}
+        />
+        <Button
+          className="absolute right-0 top-0 rounded-full"
+          disabled={isLoading || !input.value.trim()}
+          size="icon"
+          type="submit"
+        >
+          <Send />
+        </Button>
+      </form>
     </main>
   );
 }
