@@ -5,7 +5,7 @@ import { useConversation } from '@/hooks/useConversation';
 
 import { Button } from '@/components/ui/button';
 import { Message } from '@/components/message';
-import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 interface AppProps {
   initialMessage?: string;
@@ -44,14 +44,16 @@ export default function App({ initialMessage }: AppProps) {
           reply();
         }}
       >
-        <Input
-          className="rounded-full"
+        {/* 19px border radius is 1/2 of initial height */}
+        <Textarea
+          className="min-h-0 resize-none rounded-[19px] pr-12"
           placeholder="Type a message..."
+          rows={Math.min(input.value.split('\n').length, 4)}
           value={input.value}
           onChange={(e) => input.setValue(e.target.value)}
         />
         <Button
-          className="absolute right-0 top-0 rounded-full"
+          className="absolute bottom-0 right-0 rounded-full"
           disabled={isLoading || !input.value.trim()}
           size="icon"
           type="submit"
