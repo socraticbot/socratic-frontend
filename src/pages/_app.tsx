@@ -3,6 +3,8 @@ import type { AppProps } from 'next/app';
 
 import { Cinzel, Inter } from 'next/font/google';
 
+import { TooltipProvider } from '@/components/ui/tooltip';
+
 const cinzel = Cinzel({
   subsets: ['latin'],
   variable: '--font-header',
@@ -21,7 +23,9 @@ export default function App({ Component, pageProps }: AppProps) {
           --font-header: ${cinzel.style.fontFamily};
         }
       `}</style>
-      <Component {...pageProps} />
+      <TooltipProvider>
+        <Component {...pageProps} />
+      </TooltipProvider>
     </>
   );
 }
