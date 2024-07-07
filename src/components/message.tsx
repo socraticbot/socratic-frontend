@@ -59,7 +59,7 @@ export function Message({ children, role }: MessageProps) {
             onClick={handleCopy}
           />
         </TooltipTrigger>
-        <TooltipContent>Click to copy</TooltipContent>
+        <TooltipContent>{didCopy ? 'Copied!' : 'Click to copy'}</TooltipContent>
       </Tooltip>
     </div>
   );
