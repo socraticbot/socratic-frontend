@@ -82,30 +82,6 @@ export function useConversation({ initialMessage }: UseConversationProps) {
     }
     return initialState;
   });
-  // {
-  //   id: '1',
-  //   role: 'assistant',
-  //   content:
-  //     "This is my opening statement. I will share my understanding of the user's argument(s) and the context in which they were written. I will then ask whether my understanding is correct.",
-  // },
-  // {
-  //   id: '2',
-  //   role: 'user',
-  //   content:
-  //     'I will clarify whether the understanding is correct and provide any additional information that may be helpful.',
-  // },
-  // {
-  //   id: '3',
-  //   role: 'assistant',
-  //   content:
-  //     'Once the user confirms that I understand their argument and the context, I will a question to prompt the user to think critically about their claims.',
-  // },
-  // {
-  //   id: '4',
-  //   role: 'user',
-  //   content:
-  //     'I will respond to the question and continue the conversation until I feel confident to post my response on Agora.city.',
-  // },
 
   const addMessage = useCallback(
     (message: ConversationMessage) => setMessages((messages) => [...messages, message]),

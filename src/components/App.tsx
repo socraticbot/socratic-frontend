@@ -1,3 +1,4 @@
+import { BeatLoader } from 'react-spinners';
 import { Send } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 
@@ -36,6 +37,11 @@ export default function App({ initialMessage }: AppProps) {
             {message.content}
           </Message>
         ))}
+        {isLoading && (
+          <Message role="assistant">
+            <BeatLoader color="hsl(var(--muted-foreground))" size={12} />
+          </Message>
+        )}
       </div>
       <form
         className="relative mt-2 flex flex-row"

@@ -1,6 +1,6 @@
 'use client';
 import { CircleUser, Copy, CopyCheck } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -9,7 +9,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import socraticBotAvatarSrc from '@/assets/socraticboticon.png';
 
 export interface MessageProps {
-  children: string;
+  children: string | ReactElement;
   role: 'user' | 'assistant';
 }
 
@@ -26,15 +26,17 @@ export function Message({ children, role }: MessageProps) {
   const Icon = didCopy ? CopyCheck : Copy;
 
   const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText(children);
+    if (typeof children === 'string') {
+      navigator.clipboard.writeText(children);
 
-    setDidCopy(true);
-    const timeoutId = setTimeout(() => {
-      setDidCopy(false);
-      setTimeoutId(null);
-    }, 2_000);
+      setDidCopy(true);
+      const timeoutId = setTimeout(() => {
+        setDidCopy(false);
+        setTimeoutId(null);
+      }, 2_000);
 
-    setTimeoutId(timeoutId);
+      setTimeoutId(timeoutId);
+    }
   }, [children]);
 
   return (
@@ -51,16 +53,18 @@ export function Message({ children, role }: MessageProps) {
         </AvatarFallback>
       </Avatar>
       <div className="max-w-sm rounded-md bg-accent p-3">{children}</div>
-      <Tooltip>
-        <TooltipTrigger>
-          <Icon
-            className="h-4 w-4 cursor-pointer text-muted-foreground opacity-0 transition-all hover:text-primary active:scale-90 group-hover:opacity-100"
-            role="button"
-            onClick={handleCopy}
-          />
-        </TooltipTrigger>
-        <TooltipContent>{didCopy ? 'Copied!' : 'Click to copy'}</TooltipContent>
-      </Tooltip>
+      {typeof children === 'string' && (
+        <Tooltip>
+          <TooltipTrigger>
+            <Icon
+              className="h-4 w-4 cursor-pointer text-muted-foreground opacity-0 transition-all hover:text-primary active:scale-90 group-hover:opacity-100"
+              role="button"
+              onClick={handleCopy}
+            />
+          </TooltipTrigger>
+          <TooltipContent>{didCopy ? 'Copied!' : 'Click to copy'}</TooltipContent>
+        </Tooltip>
+      )}
     </div>
   );
 }
